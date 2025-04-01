@@ -1,0 +1,158 @@
+% Test Ros Message formalism types
+include('understanding-logic/tff/model/engines-and-modelets.tff').
+include('decision-logic/tff/model/ros-message-formalisms.tff').
+
+
+%%%----------------------------------------------------------------------------
+%----Setup 
+%%%----------------------------------------------------------------------------
+
+% Setup some mock numbers
+tff(decl_number_one, type,   one: size).
+tff(decl_number_two, type,   two: size).
+tff(decl_number_three, type, three: size).
+tff(decl_number_four, type,  four: size).
+tff(decl_number_five, type,  five: size).
+tff(decl_distinct_numbers, axiom,
+    $distinct(one, two, three, four, five)).
+
+% Setup some mock templaces
+tff(decl_t1_template, type,
+    t1: template).
+
+tff(t1_formalism_axiom2, axiom,
+    formalism_of_t(t1) = 'ROS2.msg.BoundedString'(one)).
+
+tff(decl_t2_template, type,
+    t2: template).
+
+tff(t2_formalism_axiom2, axiom,
+    formalism_of_t(t2) = 'ROS2.msg.UnboundedDynamicArray'('ROS2.msg.Float32')).
+
+
+%%%----------------------------------------------------------------------------
+%----Tests
+%%%----------------------------------------------------------------------------
+
+
+% Test if formalisms can be assigned to templates
+% tff(test_templates_have_formalisms, conjecture,
+%     (
+%     formalism_of_t(t1) = 
+%         'ROS2.msg.BoundedString'(one)
+%     &
+%     formalism_of_t(t1) != 
+%         'ROS2.msg.BoundedString'(two)
+%     &
+%     formalism_of_t(t1) != 
+%         'ROS2.msg.UnboundedDynamicArray'('ROS2.msg.Float32')
+%     &
+%     formalism_of_t(t2) = 
+%         'ROS2.msg.UnboundedDynamicArray'('ROS2.msg.Float32')
+%     &
+%     formalism_of_t(t2) != 
+%         'ROS2.msg.UnboundedDynamicArray'('ROS2.msg.Uint32')
+%     &
+%     formalism_of_t(t1) != formalism_of_t(t2)
+%     )
+% ).
+
+
+% Test if builtins are distinct
+% tff(test_builtins_distinctness, conjecture,
+%     $distinct(
+%         'ROS2.msg.Bool',
+%         'ROS2.msg.Byte',
+%         'ROS2.msg.Char',
+%         'ROS2.msg.Float32',
+%         'ROS2.msg.Float64',
+%         'ROS2.msg.Int8',
+%         'ROS2.msg.Uint8',
+%         'ROS2.msg.Int16',
+%         'ROS2.msg.Uint16',
+%         'ROS2.msg.Int32',
+%         'ROS2.msg.Uint32',
+%         'ROS2.msg.Int64',
+%         'ROS2.msg.Uint64',
+%         'ROS2.msg.String',
+%         'ROS2.msg.Wstring'
+%     )
+%     &
+%     'ROS2.msg.Bool' != 'ROS2.msg.Byte',
+%     &
+%     'ROS2.msg.Uint8' != 'ROS2.msg.String',
+%
+% ).
+
+% Test if polymorphic formalisms with different arguments are distinct 
+% tff(polymorphic_formalisims_distinct_by_arguments, conjecture,
+%     (
+%     'ROS2.msg.BoundedString'(three) != 
+%         'ROS2.msg.BoundedString'(four)
+%     &
+%     'ROS2.msg.UnboundedDynamicArray'('ROS2.msg.Int8') != 
+%         'ROS2.msg.UnboundedDynamicArray'('ROS2.msg.String')
+%     &
+%     'ROS2.msg.BoundedDynamicArray'('ROS2.msg.Int32', three) != 
+%         'ROS2.msg.BoundedDynamicArray'('ROS2.msg.String', three)
+%     &
+%     'ROS2.msg.BoundedDynamicArray'('ROS2.msg.Int32', four) != 
+%         'ROS2.msg.BoundedDynamicArray'('ROS2.msg.String', three)
+%     &
+%     'ROS2.msg.BoundedDynamicArray'('ROS2.msg.String', four) != 
+%         'ROS2.msg.BoundedDynamicArray'('ROS2.msg.String', three)
+%     &
+%     'ROS2.msg.StaticArray'('ROS2.msg.Int32', two) != 
+%         'ROS2.msg.StaticArray'('ROS2.msg.String', two)
+%     &
+%     'ROS2.msg.StaticArray'('ROS2.msg.Int32', five) != 
+%         'ROS2.msg.StaticArray'('ROS2.msg.String', two)
+%     &
+%     'ROS2.msg.StaticArray'('ROS2.msg.String', five) != 
+%         'ROS2.msg.StaticArray'('ROS2.msg.String', two)
+%     )
+% ).
+
+
+% Test if polymorphic formalisms are distinct from the builtins
+% tff(polymorphic_formalisims_distinct_from_builtins, conjecture,
+%     (
+%     'ROS2.msg.String' != 
+%         'ROS2.msg.BoundedString'(four)
+%     &
+%     'ROS2.msg.Int8' != 
+%         'ROS2.msg.UnboundedDynamicArray'('ROS2.msg.String')
+%     &
+%     'ROS2.msg.Uint64' != 
+%         'ROS2.msg.BoundedDynamicArray'('ROS2.msg.Float32', four)
+%     &
+%     'ROS2.msg.Char' != 
+%         'ROS2.msg.StaticArray'('ROS2.msg.Byte', one)
+%     )
+% ).
+
+
+% Test if polymorphic formalisms are distinct from each other
+tff(polymorphic_formalisms_distinct_from_each_other, conjecture,
+    (
+    'ROS2.msg.BoundedString'(three) != 
+        'ROS2.msg.UnboundedDynamicArray'('ROS2.msg.Int8')
+    &
+    'ROS2.msg.BoundedString'(five) != 
+        'ROS2.msg.BoundedDynamicArray'('ROS2.msg.Int8', two)
+    &
+    'ROS2.msg.BoundedString'(four) != 
+        'ROS2.msg.StaticArray'('ROS2.msg.Bool', three)
+    &
+    'ROS2.msg.UnboundedDynamicArray'('ROS2.msg.Wstring') != 
+        'ROS2.msg.BoundedDynamicArray'('ROS2.msg.Char', two)
+    &
+    'ROS2.msg.UnboundedDynamicArray'('ROS2.msg.Wstring') != 
+        'ROS2.msg.StaticArray'('ROS2.msg.Uint16', five)
+    &
+    'ROS2.msg.BoundedDynamicArray'('ROS2.msg.Byte', one) != 
+        'ROS2.msg.StaticArray'('ROS2.msg.Uint32', four)
+    )
+).
+
+
