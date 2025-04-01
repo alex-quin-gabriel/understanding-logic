@@ -1,4 +1,4 @@
-
+#!/usr/bin/env python3
 
 import sys
 import argparse
@@ -6,19 +6,25 @@ import random
 
 
 
-NUM_PHENOMENA=250
-NUM_FORMALISMS=100
-NUM_TEMPLATES=200 # has to be smaller than number of modelets
-NUM_MODELETS=500 # has to be bigger than number of templates
-NUM_PROPERTIES=200
+NUM_PHENOMENA=25#0
+NUM_FORMALISMS=10#0
+NUM_TEMPLATES=30#0 # has to be smaller than number of modelets
+NUM_MODELETS=50#0 # has to be bigger than number of templates
+NUM_PROPERTIES=30#0
 #NUM_REQUIREMENTS=20
-NUM_ENGINES=300
-NUM_TEMPLATE_SETS=300
+NUM_ENGINES=30#0
+NUM_TEMPLATE_SETS=30#0
 
-MAX_PROPERTIES = 20
-MAX_TEMPLATES = 5
+MAX_PROPERTIES = 20 # cannot be greater than NUM_PROPERTIES
+MAX_TEMPLATES = 25 # cannot be greater than NUM_TEMPLATES
 MAX_NUMBERS = 10
+
 NUMBERS = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"]
+
+
+USE_ROS_FORMALISMS = True
+MAX_SIZES = 10
+SIZES = ["size1", "size2", "size3", "size4", "size5", "size6", "size7", "size8", "size9", "size10"]
 
 
 def create_phenomenons(n):
@@ -47,17 +53,24 @@ def create_numbers():
         output += f"tff({number}_decl, type, {number} : real).\n"
     return output
 
-def create_properties_and_requirements(n, formalism_count):
+def create_sizes():
+    output = ""
+    for n in range(MAX_SIZES):
+        size = SIZES[n]
+        output += f"tff({size}_decl, type, {size} : size).\n"
+    return output
+
+def create_properties_and_requirements(n):
     output = "%%%  properties and requirements  %%%\n"
     for index in range(1, n+1):
-        m = random.randint(1, formalism_count)
+        formalism = _get_formalism()
         v = random.randint(0, MAX_NUMBERS-1)
         output += f"tff(property_{index}_decl, type, prop_{index} : property).\n"
-        output += f"tff(property_{index}_uses_formalism_decl, axiom,\n  type_of_p(prop_{index}) = formalism_{m}\n).\n"
+        output += f"tff(property_{index}_uses_formalism_decl, axiom,\n  type_of_p(prop_{index}) = {formalism}\n).\n"
         output += f"tff(property_{index}_has_value_{v}, axiom,\n  has_value(prop_{index}) = {NUMBERS[v]}\n).\n\n"
 
         output += f"tff(requirement_{index}_decl, type, req_{index} : requirement).\n"
-        output += f"tff(requirement_{index}_uses_formalism_decl, axiom,\n  type_of_r(req_{index}) = formalism_{m}\n).\n"
+        output += f"tff(requirement_{index}_uses_formalism_decl, axiom,\n  type_of_r(req_{index}) = {formalism}\n).\n"
         output += f"tff(requirement_{index}_has_permissible_value_{v}, axiom,\n  is_permissible(req_{index}, {NUMBERS[v]})\n).\n\n"
     output += "tff(all_props, axiom,\n  ![P : property]:\n  (\n    "
     output += "\n    |\n    ".join([f"P = prop_{index}" for index in range(1,n+1)])
@@ -66,6 +79,54 @@ def create_properties_and_requirements(n, formalism_count):
     output += "\n    |\n    ".join([f"R = req_{index}" for index in range(1,n+1)])
     output += "\n  )\n).\n\n"
     return output
+
+
+def _get_formalism():
+    if not USE_ROS_FORMALISMS:
+        return f"formalism_{random.randint(1, NUM_FORMALISMS)}"
+
+    assert(len(SIZES) > 0)
+
+    builtins = [
+                'Bool',
+                'Byte',
+                'Char',
+                'Float32',
+                'Float64',
+                'Int8',
+                'Uint8',
+                'Int16',
+                'Uint16',
+                'Int32',
+                'Uint32',
+                'Int64',
+                'Uint64',
+                'String',
+                'Wstring']
+    arrays = [
+              'BoundedString',
+              'UnboundedDynamicArray',
+              'BoundedDynamicArray',
+              'StaticArray']
+    namespace = 'ROS2.msg.'
+
+    i = random.randint(0, len(builtins) + len(arrays) - 1)
+    # i = random.randint(0, len(builtins) - 1) # only include the builtins
+    if i >= len(builtins): # arrays
+        a = i - len(builtins)
+        b = random.randint(0, len(builtins) - 1)
+
+        if a == 1: # UnboundedDynamicArray
+            return f"'{namespace}{arrays[a]}'('{namespace}{builtins[b]}')"
+
+        s = random.randint(0, len(SIZES) - 1)
+        if a == 0: # BoundedString
+            return f"'{namespace}{arrays[a]}'({SIZES[s]})"
+
+        return f"'{namespace}{arrays[a]}'('{namespace}{builtins[b]}', {SIZES[s]})"
+
+    return f"'{namespace}{builtins[i]}'"
+
 
 
 #def create_requirement(n=20, formalism_count):
@@ -81,7 +142,7 @@ def create_templates_and_modelets(num_templates, num_modelets, max_properties, p
         template = ""
         modelet = ""
         phenomenon = random.randint(1, NUM_PHENOMENA)
-        formalism = random.randint(1, NUM_FORMALISMS)
+        formalism = _get_formalism()
         modelet += f"tff(modelet_{index}_decl, type, modelet_{index} : modelet).\n"
         template += f"tff(template_{index}_decl, type, template_{index} : template).\n"
         properties = random.sample(range(1, property_count+1), random.randint(1, max_properties))
@@ -89,10 +150,10 @@ def create_templates_and_modelets(num_templates, num_modelets, max_properties, p
             modelet += f"tff(modelet_{index}_has_property_{m}, axiom,\n  is_property_of_m(prop_{m}, modelet_{index})\n).\n"
             template += f"tff(template_{index}_has_requirement_{m}, axiom,\n  is_part_of(req_{m}, template_{index})\n).\n"
         modelet += f"tff(modelet_{index}_of_phenomenon_{phenomenon}, axiom,\n  referent_of_m(modelet_{index}) = phenomenon_{phenomenon}\n).\n"
-        modelet += f"tff(modelet_{index}_has_formalism_{formalism}, axiom,\n  formalism_of_m(modelet_{index}) = formalism_{formalism}\n).\n\n"
+        modelet += f"tff(formalism_of_modelet_{index}, axiom,\n  formalism_of_m(modelet_{index}) = {formalism}\n).\n\n"
         #for m in random.sample(range(1, property_count+1), random.randint(1, max_requirements)):
         template += f"tff(template_{index}_of_phenomenon_{phenomenon}, axiom,\n  referent_of_t(template_{index}) = phenomenon_{phenomenon}\n).\n"
-        template += f"tff(template_{index}_has_formalism_{formalism}, axiom,\n  formalism_of_t(template_{index}) = formalism_{formalism}\n).\n"
+        template += f"tff(formalism_of_template_{index}, axiom,\n  formalism_of_t(template_{index}) = {formalism}\n).\n"
         template += f"tff(template_{index}_requirements, axiom,\n  ![R : requirement]:\n  (\n"
         template += f"    is_part_of(R, template_{index})\n    =>\n    (\n      "
         template += "\n      |\n      ".join([f"R = req_{m}" for m in properties])
@@ -101,12 +162,12 @@ def create_templates_and_modelets(num_templates, num_modelets, max_properties, p
         output += template
     for index in range(num_templates+1, num_modelets+1):
         phenomenon = random.randint(1, NUM_PHENOMENA)
-        formalism = random.randint(1, NUM_FORMALISMS)
+        formalism = _get_formalism()
         output += f"tff(modelet_{index}_decl, type, modelet_{index} : modelet).\n"
         for m in random.sample(range(1, property_count+1), random.randint(1, max_properties)):
             output += f"tff(modelet_{index}_has_property_{m}, axiom,\n  is_property_of_m(prop_{m}, modelet_{index})\n).\n"
         output += f"tff(modelet_{index}_has_phenomenon_{phenomenon}, axiom,\n  referent_of_m(modelet_{index}) = phenomenon_{phenomenon}\n).\n"
-        output += f"tff(modelet_{index}_has_formalism_{formalism}, axiom,\n  formalism_of_m(modelet_{index}) = formalism_{formalism}\n).\n\n"
+        output += f"tff(formalism_of_modelet_{index}, axiom,\n  formalism_of_m(modelet_{index}) = {formalism}\n).\n\n"
     output += "tff(all_modelets, axiom,\n  ![M : modelet]:\n  (\n    "
     output += "\n    |\n    ".join([f"M = modelet_{index}" for index in range(1,num_modelets+1)])
     output += "\n  )\n).\n"
@@ -134,7 +195,7 @@ def create_template_sets(n, max_templates, template_count):
     return output
 
 
-def create_engines(n, template_set_count, property_count, max_properties):
+def create_engines(n, template_set_count, max_properties, property_count):
     output = "%%%  engines  %%%\n"
     for index in range(1, n+1):
         output += f"tff(engine_{index}_decl, type, engine_{index} : engine).\n"
@@ -195,14 +256,18 @@ def create_exertable_1_test():
 
 def main() -> int:
     output = "include('understanding-logic/tff/model/properties.tff').\n\n"
+    if USE_ROS_FORMALISMS:
+        output += "include('understanding-logic/tff/model/ros-message-formalisms.tff').\n\n"
+        output += create_sizes()
     output += create_numbers()
     output += create_phenomenons(NUM_PHENOMENA)
-    output += create_formalisms(NUM_FORMALISMS)
-    output += create_properties_and_requirements(NUM_PROPERTIES, NUM_FORMALISMS)
+    if not USE_ROS_FORMALISMS:
+        output += create_formalisms(NUM_FORMALISMS)
+    output += create_properties_and_requirements(NUM_PROPERTIES)
     output += create_templates_and_modelets(NUM_TEMPLATES, NUM_MODELETS, MAX_PROPERTIES, NUM_PROPERTIES)
     output += create_template_sets(NUM_TEMPLATE_SETS, MAX_TEMPLATES, NUM_TEMPLATES)
     #output += create_modelets(NUM_MODELETS, MAX_PROPERTIES, NUM_PROPERTIES)
-    output += create_engines(NUM_ENGINES, NUM_TEMPLATE_SETS, NUM_PROPERTIES, MAX_PROPERTIES)
+    output += create_engines(NUM_ENGINES, NUM_TEMPLATE_SETS, MAX_PROPERTIES, NUM_PROPERTIES)
     output += create_modelet_sets(MAX_TEMPLATES)
 
     print(output)
