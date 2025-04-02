@@ -2,9 +2,9 @@
 
 ## Creating test
 
-You can generated test scenarios for the conjectures in the `tests` folder by
+You can generate test scenarios for the conjectures in the `tests` folder by
 editing `tests/create-test.py` to adjust the number of instances to create, and
-the running `python create-test.py > test-scenario.tff` in the `tests`
+then running `python create-test.py > test-scenario.tff` in the `tests`
 directory.
 
 To modify the tests to use the ROS 2 formalism, set `USE_ROS_FORMALISMS = True`
