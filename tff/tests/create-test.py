@@ -142,7 +142,7 @@ def create_templates_and_modelets(num_templates, num_modelets, max_properties, p
         template = ""
         modelet = ""
         phenomenon = random.randint(1, NUM_PHENOMENA)
-        formalism = _get_formalism()
+        formalism = _get_random_formalism()
         modelet += f"tff(modelet_{index}_decl, type, modelet_{index} : modelet).\n"
         template += f"tff(template_{index}_decl, type, template_{index} : template).\n"
         properties = random.sample(range(1, property_count+1), random.randint(1, max_properties))
@@ -162,7 +162,7 @@ def create_templates_and_modelets(num_templates, num_modelets, max_properties, p
         output += template
     for index in range(num_templates+1, num_modelets+1):
         phenomenon = random.randint(1, NUM_PHENOMENA)
-        formalism = _get_formalism()
+        formalism = _get_random_formalism()
         output += f"tff(modelet_{index}_decl, type, modelet_{index} : modelet).\n"
         for m in random.sample(range(1, property_count+1), random.randint(1, max_properties)):
             output += f"tff(modelet_{index}_has_property_{m}, axiom,\n  is_property_of_m(prop_{m}, modelet_{index})\n).\n"
