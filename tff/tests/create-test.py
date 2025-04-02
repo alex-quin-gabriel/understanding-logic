@@ -63,7 +63,7 @@ def create_sizes():
 def create_properties_and_requirements(n):
     output = "%%%  properties and requirements  %%%\n"
     for index in range(1, n+1):
-        formalism = _get_formalism()
+        formalism = _get_random_formalism()
         v = random.randint(0, MAX_NUMBERS-1)
         output += f"tff(property_{index}_decl, type, prop_{index} : property).\n"
         output += f"tff(property_{index}_uses_formalism_decl, axiom,\n  type_of_p(prop_{index}) = {formalism}\n).\n"
@@ -81,7 +81,7 @@ def create_properties_and_requirements(n):
     return output
 
 
-def _get_formalism():
+def _get_random_formalism():
     if not USE_ROS_FORMALISMS:
         return f"formalism_{random.randint(1, NUM_FORMALISMS)}"
 
