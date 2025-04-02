@@ -1,6 +1,6 @@
 include('test-scenario-ros.tff').
 
-tff(conj6, question,
+tff(question6, question,
   ?[E: engine, MS: modelet_set]:
     exertable(MS, E)
 ).
