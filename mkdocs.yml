@@ -1,0 +1,179 @@
+# yaml-language-server: $schema=https://squidfunk.github.io/mkdocs-material/schema.json
+
+# Site Information
+site_name: Understanding System
+site_url: https://localhost:8000/
+repo_url: https://github.com/alex-quin-gabriel/understanding-logic
+edit_uri: edit/documentation/docs/ # Location of documentation URI
+extra_css:
+  - stylesheets/extra.css
+copyright: Designed & Developed by <a href='https://kas-lab.github.io/'>Delft University of Technology</a> 2025
+
+# Navigation structure of the website
+nav:
+  - Home: 
+    - index.md
+    - Documentation Instructions: documentation-instructions.md
+  - Usage:
+    - usage/index.md
+  - Concepts:
+    - concepts/index.md
+    - Agent: concepts/agent.md
+    - Engine: concepts/engine.md
+    - Formalism: concepts/formalism.md
+    - Format: concepts/format.md
+    - Modelet: concepts/modelet.md
+    - Origin: concepts/origin.md
+    - Phenomenon: concepts/phenomenon.md
+    - Property: concepts/property.md
+    - Real: concepts/real.md
+    - Requirement: concepts/requirement.md
+    - Sequence: concepts/sequence.md
+    - Template: concepts/template.md
+    - Topic: concepts/topic.md
+  # - System Architecture: 
+  #   - architecture/index.md
+  # - Packages:
+  #   - packages/index.md
+  - CoreSense: https://coresense.eu/
+  # - Current Progress: progress.md
+
+# Visual appearance and behavior
+theme:
+  name: material
+  custom_dir: docs/overrides # Location of customized HTML blocks
+  logo: assets/images/coresense-logo-reverse.png
+  favicon: assets/images/cropped-Coresense-Site-Logo-32x32.png
+  palette: 
+    # Palette toggle for light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/brightness-2
+        name: Switch to dark mode
+
+    # Palette toggle for dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/brightness-7
+        name: Switch to light mode
+  font:
+    text: Montserrat
+    code: Fira Code
+  features:
+    - navigation.footer # Show the footer
+    #- navigation.instant # Preload pages for navigation (incompatible with offline plugin)
+    #- navigation.instant.preview # Preview pages when hovering over a link <-- feature comming soon!
+    - navigation.tracking # Add the current section to the URL
+    - navigation.tabs # Add tabs for top-level pages to the header
+    #- navigation.path # Show the navigation path at the top of each page <-- feature comming soon!
+    - navigation.top # Show a 'Back to Top' button
+    - navigation.indexes # A document can be used as the introduction to a section
+
+    
+    - toc.follow # Scroll the table of contents to the current section
+    #- toc.integrate # Integrate the table of contents into the navigation pane
+
+    - search.suggest # Enable search suggestions
+    - search.highlight # Highlight all occurances after searching
+
+    # Add view and edit icons for documentation source
+    - content.action.edit
+    - content.action.view
+
+    # Globally enable code copying, highlighting, and annotations
+    - content.code.copy
+    #- content.code.select
+    - content.code.annotate
+
+    #- content.footnote.tooltips # Enable preview of footnotes <-- feature comming soon!
+
+  # icon:
+  #   tag:
+  #     panda: material/robot-industrial
+
+# Plugins which add site functionality
+plugins:
+  - search # Show a search bar
+  - offline # Enable the search function offline
+  - tags # Enable tags to help search related pages
+      #tags_file: tags.md # An index of all of the tags 
+  - glightbox # Enable zooming on images
+  - git-revision-date-localized: # Show the last revision date at the bottom of each page
+      type: date
+      fallback_to_build_date: true
+  # - git-committers: # Show the people who made commits to the page
+  #     repository: tud-airlab-ros2/albert_ros2_package
+  #     branch: main
+  - open-in-new-tab
+  # - multirepo: # Build documentation from other repos
+  #     cleanup: true # (optional) tells multirepo to cleanup the temporary directory after site is built.
+      # nav_repos:
+      #   - name: backstage # top-level reference in the nav section
+      #     import_url: https://github.com/backstage/backstage
+      #     # forward slash is needed in '/README.md' so that only the README.md in the root
+      #     # directory is imported and not all README.md files.
+      #     imports: [
+      #       docs/publishing.md, docs/integrations/index.md, /README.md,
+      #       # asset files needed
+      #       docs/assets/*
+      #       ]
+      #   - name: old-albert-documentation
+      #     import_url: https://gitlab.tudelft.nl/airlab-delft/ng-staging/albert/albert_documentation
+      #     imports: [ 
+      #       albert.md, documentation/assets/* 
+      #       ]
+        # - name: old_airlab
+
+# Entra configuration for plugins
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/alex-quin-gabriel/understanding-logic
+      name: Project Github
+#   tags:
+#     Panda: panda
+#     Boxer: boxer
+#     Albert: albert
+
+watch: # Directories to check for updates
+  - ./README.md
+
+# Extensions which affect how Markdown is parsed
+markdown_extensions:
+  - admonition # Enable callouts
+  - pymdownx.details # Enable collapsible callouts
+  - footnotes # Enable usage of footnotes
+  - md_in_html # Enable markdown parsing within HTML elements
+  - attr_list # Enable Attribute lists for individual content blocks (useful with other plugins)
+  - def_list # Add definitions list (for nice-looking definitions
+  - pymdownx.tasklist: # Github markdown style checklists
+      custom_checkbox: true
+  - pymdownx.superfences # Enable arbitrary nesting of content blocks
+  - pymdownx.snippets:
+      check_paths: true
+  - pymdownx.critic # Enable special syntax for insertions and deletions 
+  - pymdownx.caret # Enable special syntax for underlining text
+  - pymdownx.keys # Enable rendering keyboard keys
+  - pymdownx.mark # Enable special syntax for highlighting text
+  - pymdownx.tilde # Enable special syntax for strikethrough text
+  - pymdownx.emoji: # Enable usage of icons and emojis
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.highlight: # Syntax highlighting for code blocks
+      anchor_linenums: true
+      use_pygments: true
+      pygments_lang_class: true
+      line_spans: __span
+  - pymdownx.inlinehilite # Optional inline syntax highlights
+  - pymdownx.tabbed: # Enable content tabs
+      alternate_style: true
+      combine_header_slug: true
+  - toc: # Table of Contents settings
+      permalink: true # Add permalinks to section headers
+      toc_depth: 3 # Number of levels in the table of contents

@@ -1,1 +1,12 @@
+# Ignore generated tests
 tff/tests/test-scenario.tff
+
+# Ignore virtual environments
+venv*
+.venv*
+*venv
+.*venv
+
+# Ignore build files
+build
+site
