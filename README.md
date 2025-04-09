@@ -35,7 +35,7 @@ many extensions are supported which add extra features such as
 [Content Tabs](https://squidfunk.github.io/mkdocs-material/reference/content-tabs/), 
 and [Math](https://squidfunk.github.io/mkdocs-material/reference/math/) to name a few.
 
-To build it locally, see the [Documentation Instructions](https://github.com/alex-quin-gabriel/understanding-logic/blob/documentation/docs/README.md).
+To build it locally, see the [Documentation Instructions](https://github.com/alex-quin-gabriel/understanding-logic/blob/rolling/docs/README.md).
 
 
 ## Development Notes

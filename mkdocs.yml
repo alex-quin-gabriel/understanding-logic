@@ -19,16 +19,19 @@ nav:
   - Concepts:
     - concepts/index.md
     - Agent: concepts/agent.md
+    - Datatype: concepts/datatype.md
     - Engine: concepts/engine.md
+    - Exertion: concepts/exertion.md
+    - Extent: concepts/extent.md
     - Formalism: concepts/formalism.md
-    - Format: concepts/format.md
     - Modelet: concepts/modelet.md
     - Origin: concepts/origin.md
     - Phenomenon: concepts/phenomenon.md
     - Property: concepts/property.md
-    - Real: concepts/real.md
     - Requirement: concepts/requirement.md
-    - Sequence: concepts/sequence.md
+    - Role: concepts/role.md
+    - Space Time Point: concepts/spacetime_point.md
+    - Strategy: concepts/strategy.md
     - Template: concepts/template.md
     - Topic: concepts/topic.md
   # - System Architecture: 

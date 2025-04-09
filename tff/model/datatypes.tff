@@ -49,6 +49,7 @@ tff(ros_message_wstring_datatype, type,
     'ROS2.msg.Wstring': datatype).
 
 % ROS Message - bounded string is a datatype
+%   Note: the size must be a natural number
 %   e.g. str<=10
 tff(ros_message_bounded_string_datatype, type,
   'ROS2.msg.BoundedString': ($int > datatype)
@@ -58,14 +59,15 @@ tff(ros_message_bounded_string_datatype, type,
 tff(ros_message_unbounded_dynamic_array_datatype, type,
     'ROS2.msg.UnboundedDynamicArray': (datatype > datatype)).
 % ROS Message - bounded array of builtins is a datatype
+%   Note: the size must be a natural number
 %   e.g. char[<=5], float32[<=4]
 tff(ros_message_bounded_dynamic_array_datatype, type,
     'ROS2.msg.BoundedDynamicArray': ((datatype * $int) > datatype)).
 % ROS Message - static array of builtins is a datatype
+%   Note: the size must be a natural number
 %   e.g. char[5], float32[4]
 tff(ros_message_static_array_datatype, type,
     'ROS2.msg.StaticArray': ((datatype * $int) > datatype)).
-
 
 % ROS Message - bounded string
 %   Bounded strings of distinct $ints are also distinct

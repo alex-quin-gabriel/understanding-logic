@@ -42,10 +42,10 @@ you wish to edit and it will take you to the **Github** live editor window.
 !!! info
     In this repository, quick fix edits will be make in the `documentation`
     branch. You will need to manually merge the changes into `rolling` according to
-    the project [Contribution Guidelines](contributing.md).
+    the project [Contribution Guidelines]().
 
 !!! question "TODO"
-    Create [Contribution Guidelines](contributing.md).
+    Create Contribution Guidelines in `contributing.md`.
 
 If there is an extension or plugin you would like to add for additional functionality,
 feel free to edit the [mkdocs.yml](https://github.com/alex-quin-gabriel/understanding-logic/blob/rolling/mkdocs.yml) file.

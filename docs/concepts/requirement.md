@@ -4,11 +4,11 @@ A restriction on the [property](property.md) values that a [template](template.m
 ###### Source: `properties.tff`
 
 ## Relations
-### **type_of_r** `(`[**`requirement`**](#requirement)` > `[**`formalism`**](formalism.md)`)` { #type_of_r data-toc-label='type_of_r' }
-The [formalism](formalism.md) of a certain [requirement](#requirement).
+### **datatype_of_requirement** `(`[**`requirement`**](#requirement)` > `[**`datatype`**](datatype.md)`)` { #datatype_of_p data-toc-label='datatype_of_p' }
+The [datatype](datatype.md) of a certain [requirement](#requirement).
 ###### Source: `properties.tff`
 
-### **is_permissible** `((`[**`requirement`**](#requirement)` * `[**`real`**](real.md)`) > `**`$o`**`)` { #is_permissible data-toc-label='is_permissible' }
+### **is_permissible** `((`[**`requirement`**](#requirement)` * `**`$real`**`) > `**`$o`**`)` { #is_permissible data-toc-label='is_permissible' }
 Check if a value is *permissible* under a certain [requirement](#requirement).
 ###### Source: `properties.tff`
 
