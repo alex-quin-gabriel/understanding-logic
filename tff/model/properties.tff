@@ -58,24 +58,24 @@ tff(formally_equivalent, axiom,
       ( % Equivalence of world model classes
         template_has_concept_requirement(T, C)
         =>
-        is_concept_of_modelet(M, C)
+        modelet_models_concept(M, C)
       )
       &
       ![R: role]:
-      ( % Equivalence of processing model classes -- TODO: This feels like it will turn out to be HOL
+      ( % Equivalence of processing model classes
         template_has_role_requirement(T, R)
         =>
-        is_role_of_modelet(M, R)
+        modelet_has_role(M, R)
       )
       &
       ![E: engine]:
       ( % Equivalence of creators
         template_has_creator_requirement(T, E)
         =>
-        E = creator_of_modelet(M)
+        modelet_has_creator(M, E)
       )
     )
-    <=>
+    =>
     formally_equivalent(T, M)
   )
 ).
@@ -87,18 +87,18 @@ tff(axiom_modelet_matches_template, axiom,
     (
       formally_equivalent(T, M)
       &
-      ? [SPT : spacetime_point]:
+      ! [SPT : spacetime_point]:
       (
-        template_location(T) = SPT
+        template_has_location_requirement(T, SPT)
         =>
-        modelet_location(M) = SPT
+        modelet_has_location(M, SPT)
       )
       &
-      ? [E : extent]:
+      ! [E : extent]:
       (
-        template_extent(T) = E
+        template_has_extent_requirement(T, E)
         =>
-        modelet_extent(M) = E
+        modelet_has_extent(M, E)
       )
       &
       ! [R: requirement]:
@@ -115,7 +115,7 @@ tff(axiom_modelet_matches_template, axiom,
         )
       )
     )
-    <=>
+    =>
     inputs_match(M, T)
   )
 ).
@@ -137,7 +137,7 @@ tff(axiom_modelet_sets_matches_template_sets, axiom,
         is_in_modelet_set(M, MS)
       )
     )
-    <=>
+    =>
     interfaces_match(MS, TS)
   )
 ).

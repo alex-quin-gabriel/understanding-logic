@@ -6,23 +6,32 @@ tff(decl_engine, type,
   engine : $tType
 ).
 
+
+
 % There is an initialization engine, that is the creator of all initially existing Modelets.
-tff(decl_init_engine, type,
-  init_engine : engine
-).
+%tff(decl_init_engine, type,
+%  init_engine : engine
+%).
+
+
 
 tff(decl_engine_output_formalism, type,
   output_modelet_formalism : engine > formalism
 ).
 
-tff(decl_engine_output_topic, type,
-  is_output_modelet_topic : (engine * concept) > $o
+
+
+tff(decl_engine_output_concept, type,
+  is_output_modelet_concept : (engine * concept) > $o
 ).
+
+
 
 % Engines can impart processing semantics unto their output modelets
 tff(decl_engine_imparts_role, type,
   is_output_modelet_role : (engine * role) > $o
 ).
+
 
 
 % Engines can have processing characteristics, such as delay or resource blockage/consumption
@@ -35,58 +44,80 @@ tff(decl_modelet, type,
   modelet : $tType
 ).
 
+
+
 % Set of Modelets
 tff(decl_modelet_set, type,
   modelet_set : $tType
 ).
+
+
 
 % Modelet Sets can be exerted by Engines
 tff(decl_exertable, type,
   exertable: (modelet_set * engine) > $o
 ).
 
+
+
 % Each Modelet has exactly one formalism. A language in which it is encoded. A class in the modelling model. A ROSMessage. e.g. 'sensor_msgs/Image'
 tff(decl_formalism_of_modelet, type,
   formalism_of_modelet : modelet > formalism
 ).
+
+
 
 % Modelets have a date of creation. They were created at that date.
 tff(decl_creation_date, type,
   modelet_creation_date : modelet > $real
 ).
 
+
+
 % Modelets have a 'parents' ModeletSets, i.e. the ModeletSet, that was input to the engine producing the modelet.
 tff(decl_parents_of_modelet, type,
   parents_of_modelet : modelet > modelet_set
 ).
 
-% Modelets have a 'creator' Engine, i.e. the Engine, which created them.
+
+
+% Modelets may have a 'creator' Engine, i.e. the Engine, which created them.
 tff(decl_creator_of_modelet, type,
-  creator_of_modelet : modelet > engine
+  modelet_has_creator : (modelet * engine) > $o
 ).
 
+
+
 % Modelets may have a time-interval/date of reference. They refer to an observation made at that date. Temporal scope.
-tff(decl_modelet_location, type,
-  modelet_location : modelet > spacetime_point
+tff(decl_modelet_has_location, type,
+  modelet_has_location : (modelet * spacetime_point) > $o
 ).
+
+
 
 % Modelets may have an area/volume/location of reference. They refer to an observation made at some point. Spatial scope.
 tff(decl_modelet_extent, type,
-  modelet_extent : modelet > extent
+  modelet_has_extent : (modelet * extent) > $o
 ).
+
+
 
 % Modelets may be associated with a concept/have a topic. A class in the world model. e.g. 'ice cream'
 tff(decl_concept_of_modelet, type,
-  is_concept_of_modelet : (modelet * concept) > $o
+  modelet_models_concept : (modelet * concept) > $o
 ).
+
+
 
 % Modelets have model properties/characteristics. e.g. 'recorded wavelengths of light: an infrared picture'
 % See properties
 
+
+
 % Modelets play roles when used by engines. They can be associated with an extrinsic (to the modelet) purpose.
 % TODO: this looks like it will turn out to be HOL
 tff(decl_role_of_modelet, type,
-  is_role_of_modelet : (modelet * role) > $o
+  modelet_has_role : (modelet * role) > $o
 ).
 
 
@@ -96,20 +127,26 @@ tff(decl_set_m_membership, type,
   is_in_modelet_set : (modelet * modelet_set) > $o
 ).
 
-% (Finite) modelet sets
 
+
+% (Finite) modelet sets
 tff(empty_modelet_set, type,
   empty_ms : modelet_set
 ).
 
+
 tff(modelet_set_empty, axiom,
   ![M: modelet]:
-    ~ is_in_modelet_set(M, empty_ms)
+    ~is_in_modelet_set(M, empty_ms)
 ).
 
+
+
 tff(modelet_set_add, type,
-  s : (modelet * modelet_set) > modelet_set
+ s : (modelet * modelet_set) > modelet_set
 ).
+
+
 
 tff(modelet_set_insert, axiom,
   ![M1: modelet, M2: modelet, MS: modelet_set]:
@@ -126,8 +163,10 @@ tff(decl_exert, type,
   exert: (engine * modelet_set) > modelet
 ).
 
+
+
 % Engines impart formalisms unto Modelets
-tff(axiom_engine_may_impart_topic, axiom,
+tff(axiom_engines_impart_formalism, axiom,
   ![E: engine, MS: modelet_set]:
   (
     exertable(MS, E)
@@ -136,15 +175,19 @@ tff(axiom_engine_may_impart_topic, axiom,
   )
 ).
 
+
+
 % Engines are creators of Modelets
 tff(axiom_engines_are_creators_of_modelets, axiom,
   ![E: engine, MS: modelet_set]:
   (
     exertable(MS, E)
     =>
-    creator_of_modelet(exert(E, MS)) = E
+    modelet_has_creator(exert(E, MS), E)
   )
 ).
+
+
 
 % ModeletSets are parents of Modelets
 tff(axiom_modelet_sets_are_parents_to_modelets, axiom,
@@ -156,6 +199,8 @@ tff(axiom_modelet_sets_are_parents_to_modelets, axiom,
   )
 ).
 
+
+
 % Engines may impart roles unto Modelets
 tff(axiom_engine_may_impart_role, axiom,
   ![E: engine, MS: modelet_set, R: role]:
@@ -166,56 +211,74 @@ tff(axiom_engine_may_impart_role, axiom,
       is_output_modelet_role(E, R)
     )
     =>
-    is_role_of_modelet(exert(E, MS), R)
+    modelet_has_role(exert(E, MS), R)
   )
 ).
 
+
+
 % Engines may impart topic unto Modelets
 tff(axiom_engine_may_impart_topic, axiom,
-  ![E: engine, MS: modelet_set, P: concept]:
+  ![E: engine, MS: modelet_set, C: concept]:
   (
     (
       exertable(MS, E)
       &
-      is_output_modelet_topic(E, P)
+      is_output_modelet_concept(E, C)
     )
     =>
-    is_concept_of_modelet(exert(E, MS), P)
+    modelet_models_concept(exert(E, MS), C) 
   )
 ).
+
+
 
 % Templates. Descriptions of Engine Inputs.
 tff(decl_template, type,
   template : $tType
 ).
 
+
+
 % Each Template has exactly one formalism. The language a given Engine expects for this input. A ROSMessage.
 tff(decl_template_formalism_requirement, type,
   template_formalism_requirement : template > formalism
 ).
 
-% Modelets have a 'creator' Engine, i.e. the Engine, which created them.
-tff(decl_creator_of_modelet, type,
+
+
+% Templates have a 'creator' Engine requirement, i.e. the Engine, which created them.
+tff(decl_template_has_creator_requirement, type,
   template_has_creator_requirement : (template * engine) > $o
 ).
 
+
+
 % Templates may be located. Center of spatio-temporal scope.
-tff(decl_template_location, type,
-  template_location : template > spacetime_point
+tff(decl_template_has_location_requirement, type,
+  template_has_location_requirement : (template * spacetime_point) > $o
 ).
+
+
 
 % Templates may extend over lenth/area/volume/time. Extent of spatio-temporal scope.
-tff(decl_template_extent, type,
-  template_extent : template > extent
+tff(decl_template_has_extent_requirement, type,
+  template_has_extent_requirement : (template * extent) > $o
 ).
 
+
+
 % Templates may be associated with a concept. A class of phenomenon in the world model. 'A template of icecream'
-tff(decl_topic_of_template, type,
+tff(decl_template_has_concept_requirement, type,
   template_has_concept_requirement : (template * concept) > $o
 ).
 
+
+
 % Templates may carry model characteristic requirements. e.g. 'minimun resolution'
 % See properties
+
+
 
 % Templates carry Role requirements. Extrinsic (from the perspective of the modelet) purpose.
 tff(decl_template_has_role_requirement, type,
@@ -223,10 +286,13 @@ tff(decl_template_has_role_requirement, type,
 ).
 
 
+
 % Set of Templates
 tff(decl_template_set, type,
   template_set : $tType
 ).
+
+
 
 % Set Membership of Templates
 tff(decl_set_template_membership, type,
@@ -235,14 +301,10 @@ tff(decl_set_template_membership, type,
 
 
 
-
-
-
 % Modelets can match Templates
 tff(decl_inputs_match, type,
   inputs_match : (modelet * template) > $o
 ).
-
 
 
 
