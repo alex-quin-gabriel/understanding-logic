@@ -11,5 +11,6 @@ thf(axiom_mass_requirement, axiom,
 
 thf(test, conjecture,
 ? [E: engine, MS: modelet_set]:
+%
   (exertable @ MS @ E)
 ).

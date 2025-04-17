@@ -49,26 +49,33 @@ tff(formally_equivalent, axiom,
   (
     (
       (
-        formalism_of_template(T)
+        template_formalism_requirement(T)
         =
         formalism_of_modelet(M)
       )
       &
-      ![P: phenomenon_class]:
+      ![C: concept]:
       ( % Equivalence of world model classes
-        is_topic_of_template(T, P)
+        template_has_concept_requirement(T, C)
         =>
-        is_topic_of_modelet(M, P)
+        is_concept_of_modelet(M, C)
       )
       &
       ![R: role]:
       ( % Equivalence of processing model classes -- TODO: This feels like it will turn out to be HOL
-        is_role_of_template(T, R)
+        template_has_role_requirement(T, R)
         =>
         is_role_of_modelet(M, R)
       )
+      &
+      ![E: engine]:
+      ( % Equivalence of creators
+        template_has_creator_requirement(T, E)
+        =>
+        E = creator_of_modelet(M)
+      )
     )
-    =>
+    <=>
     formally_equivalent(T, M)
   )
 ).
@@ -108,7 +115,7 @@ tff(axiom_modelet_matches_template, axiom,
         )
       )
     )
-    =>
+    <=>
     inputs_match(M, T)
   )
 ).
@@ -130,7 +137,7 @@ tff(axiom_modelet_sets_matches_template_sets, axiom,
         is_in_modelet_set(M, MS)
       )
     )
-    =>
+    <=>
     interfaces_match(MS, TS)
   )
 ).

@@ -6,7 +6,7 @@ import random
 
 
 
-NUM_PHENOMENA=25
+NUM_CONCEPTS=25
 NUM_FORMALISMS=5
 NUM_DATATYPES=3
 NUM_TEMPLATES=5 # has to be smaller than real of modelets
@@ -29,11 +29,11 @@ USE_ROS_DATATYPES = True
 UINTS = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
 
 
-def create_phenomena(n):
-    output = "%%%  phenomena  %%%\n"
+def create_concepts(n):
+    output = "%%%  concepts  %%%\n"
     for index in range(1, n+1):
-        output += f"tff(phenomenon_{index}_decl, type, phenomenon_{index} : phenomenon_class).\n"
-    output += f"\ntff(distinct_phenomena, axiom,\n  $distinct({",".join([f"phenomenon_{index}" for index in range(1, n+1)])})\n).\n\n"
+        output += f"tff(concept_{index}_decl, type, concept_{index} : concept).\n"
+    output += f"\ntff(distinct_concepts, axiom,\n  $distinct({",".join([f"concept_{index}" for index in range(1, n+1)])})\n).\n\n"
     return output
 
 def create_roles(n):
@@ -178,7 +178,7 @@ def create_templates_and_modelets(num_templates, num_modelets, max_properties, p
     for index in range(1, num_templates+1):
         template = ""
         modelet = ""
-        phenomenon = random.randint(1, NUM_PHENOMENA)
+        concept = random.randint(1, NUM_CONCEPTS)
         formalism = random.randint(1, NUM_FORMALISMS)
         role = random.randint(1, NUM_ROLES)
         location = random.randint(1, NUM_LOCATIONS_AND_EXTENTS)
@@ -188,15 +188,15 @@ def create_templates_and_modelets(num_templates, num_modelets, max_properties, p
         for m in properties:
             modelet += f"tff(modelet_{index}_has_property_{m}, axiom,\n  is_property_of_modelet(prop_{m}, modelet_{index})\n).\n"
             template += f"tff(template_{index}_has_requirement_{m}, axiom,\n  is_part_of(req_{m}, template_{index})\n).\n"
-        modelet += f"tff(modelet_{index}_models_phenomenon_{phenomenon}, axiom,\n ![P: phenomenon_class]:\n  (\n    topic_of_modelet(modelet_{index}, P) => P = phenomenon_{phenomenon}\n  )\n).\n"
+        modelet += f"tff(modelet_{index}_models_concept_{concept}, axiom,\n ![P: concept]:\n  (\n    is_concept_of_modelet(modelet_{index}, P) => P = concept_{concept}\n  )\n).\n"
         modelet += f"tff(formalism_of_modelet_{index}, axiom,\n  formalism_of_modelet(modelet_{index}) = formalism_{formalism}\n).\n\n"
-        modelet += f"tff(role_of_modelet_{index}, axiom,\n  ![R : role]:\n  (\n    role_of_modelet(modelet_{index}, R) => R = role_{role}\n  )\n).\n\n"
+        modelet += f"tff(is_role_of_modelet_{index}, axiom,\n  ![R : role]:\n  (\n    is_role_of_modelet(modelet_{index}, R) => R = role_{role}\n  )\n).\n\n"
         modelet += f"tff(modelet_{index}_location, axiom,\n  modelet_location(modelet_{index}) = location_{location}\n).\n\n"
         modelet += f"tff(modelet_{index}_extent, axiom,\n  modelet_extent(modelet_{index}) = extent_{location}\n).\n\n"
         #for m in random.sample(range(1, property_count+1), random.randint(1, max_requirements)):
-        template += f"tff(template_{index}_of_phenomenon_{phenomenon}, axiom,\n  ![P: phenomenon_class]:\n  (\n    topic_of_template(template_{index}, P) => P = phenomenon_{phenomenon}\n  )\n).\n"
-        template += f"tff(formalism_of_template_{index}, axiom,\n  formalism_of_template(template_{index}) = formalism_{formalism}\n).\n"
-        template += f"tff(role_of_template_{index}, axiom,\n  ![R : role]:\n  (\n    role_of_template(template_{index}, R) => R = role_{role}\n  )\n).\n"
+        template += f"tff(template_{index}_of_concept_{concept}, axiom,\n  ![P: concept]:\n  (\n    topic_of_template(template_{index}, P) => P = concept_{concept}\n  )\n).\n"
+        template += f"tff(template_formalism_requirement_{index}, axiom,\n  template_formalism_requirement(template_{index}) = formalism_{formalism}\n).\n"
+        template += f"tff(template_has_role_requirement_{index}, axiom,\n  ![R : role]:\n  (\n    template_has_role_requirement(template_{index}, R) => R = role_{role}\n  )\n).\n"
         template += f"tff(template_{index}_location, axiom,\n  template_location(template_{index}) = location_{location}\n).\n\n"
         template += f"tff(template_{index}_extent, axiom,\n  template_extent(template_{index}) = extent_{location}\n).\n\n"
         template += f"tff(template_{index}_requirements, axiom,\n  ![R : requirement]:\n  (\n"
@@ -206,12 +206,12 @@ def create_templates_and_modelets(num_templates, num_modelets, max_properties, p
         output += modelet
         output += template
     for index in range(num_templates+1, num_modelets+1):
-        phenomenon = random.randint(1, NUM_PHENOMENA)
+        concept = random.randint(1, NUM_PHENOMENA)
         formalism = random.randint(1, NUM_FORMALISMS)
         output += f"tff(modelet_{index}_decl, type, modelet_{index} : modelet).\n"
         for m in random.sample(range(1, property_count+1), random.randint(1, max_properties)):
             output += f"tff(modelet_{index}_has_property_{m}, axiom,\n  is_property_of_modelet(prop_{m}, modelet_{index})\n).\n"
-        output += f"tff(modelet_{index}_has_phenomenon_{phenomenon}, axiom,\n  topic_of_modelet(modelet_{index}, phenomenon_{phenomenon})\n).\n"
+        output += f"tff(modelet_{index}_has_concept_{concept}, axiom,\n  is_concept_of_modelet(modelet_{index}, concept_{concept})\n).\n"
         output += f"tff(formalism_of_modelet_{index}, axiom,\n  formalism_of_modelet(modelet_{index}) = formalism_{formalism}\n).\n\n"
     output += f"tff(distinct_modelets, axiom,\n  $distinct({",".join([f" modelet_{index}" for index in range(1, num_modelets+1)])})\n).\n"
     output += f"tff(distinct_templates, axiom,\n  $distinct({",".join([f"template_{index}" for index in range(1, num_templates+1)])})\n).\n\n"
@@ -273,7 +273,7 @@ def main() -> int:
         output += "include('understanding-logic/tff/model/datatypes.tff').\n\n"
         #output += create_uints()
     #output += create_reals()
-    output += create_phenomena(NUM_PHENOMENA)
+    output += create_concepts(NUM_PHENOMENA)
     output += create_roles(NUM_ROLES)
     if not USE_ROS_DATATYPES:
         output += create_datatypes(NUM_DATATYPES)

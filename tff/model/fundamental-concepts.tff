@@ -5,9 +5,9 @@
 %  agent : $tType
 %).
 
-% Phenomena classes - Topics of modelets. The concepts in the world model, that the system represents using Modelets.
-tff(decl_phenomenon_class, type,
-  phenomenon_class : $tType
+% Concepts - The class of phenomenon in the world model, that the system represents using Modelets.
+tff(decl_concept, type,
+  concept : $tType
 ).
 
 % Formalisms - Methods used to express modelets. Class in Data Model. ROSMessages.

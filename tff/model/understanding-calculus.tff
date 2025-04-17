@@ -29,15 +29,7 @@ tff(exertion_axiom, axiom,
       )
     )
     =>
-    ?[RUS : modelet_set, OutputModelet : modelet]:
-    (
-      OutputModelet = exert(E, MS)
-      &
-      exertion(E, MS, OutputModelet, IUS) = RUS
-      &
-      is_in_modelet_set(OutputModelet, RUS)
-    )
+    exertion(E, MS, exert(E, MS), IUS) = s(exert(E, MS), IUS)
   )
 ).
-%      &
-%      ~is_in_modelet_set(exert(E, MS), IUS)
+

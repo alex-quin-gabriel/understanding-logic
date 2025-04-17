@@ -62,11 +62,11 @@ tff(m1_in_ms, axiom, in_set_m(m1, ms)).
 tff(m2_in_ms, axiom, in_set_m(m2, ms)).
 
 
-tff(table_phenomenon, type, table : phenomenon).
+tff(table_concept, type, table : concept).
 tff(referent_of_t_t1, axiom, referent_of_t(t1) = table).
 tff(referent_of_m_m1, axiom, referent_of_m(m1) = table).
 
-tff(chair_phenomenon, type, chair : phenomenon).
+tff(chair_concept, type, chair : concept).
 tff(referent_of_t_t2, axiom, referent_of_t(t2) = chair).
 tff(referent_of_m_m2, axiom, referent_of_m(m2) = chair).
 
@@ -79,7 +79,7 @@ tff(property_distinctness, axiom, $distinct(accuracyProp, varianceProp)).
 tff(modelet_distinctness, axiom, $distinct(m1, m2, m3)).
 tff(template_distinctness, axiom, $distinct(t1, t2)).
 tff(formalism_distinctness, axiom, $distinct(number, distribution)).
-tff(phenomena_distinctness, axiom, $distinct(chair, table)).
+tff(concept_distinctness, axiom, $distinct(chair, table)).
 
 tff(list_engines, axiom,
   ! [E: engine]:
@@ -93,12 +93,12 @@ tff(list_template_sets, axiom,
   ! [TS: template_set]:
   (TS = ts)
 ).
-tff(list_phenomena, axiom,
-  ! [P: phenomenon]:
+tff(list_concepts, axiom,
+  ! [C: concept]:
   (
-    (P = table)
+    (C = table)
     |
-    (P = chair)
+    (C = chair)
   )
 ).
 
