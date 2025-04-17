@@ -265,7 +265,7 @@ tff(axiom_modelet_set_is_exertable, axiom,
   ! [MS: modelet_set, E : engine]:
   (
    interfaces_match(MS, interface_of(E))
-   <=>
+   =>
    exertable(MS, E)
   )
 ).
