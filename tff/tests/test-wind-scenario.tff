@@ -99,9 +99,9 @@ tff(gnss_template_formalism, axiom,
   template_formalism_requirement(gnss_template) = navSatFix_msg
 ).
 
-tff(gnss_template_role, axiom,
-  ~?[R : role]:
-    template_has_role_requirement(gnss_template, R)
+tff(gnss_template_representation_class, axiom,
+  ~?[R : representation_class]:
+    template_has_representation_class_requirement(gnss_template, R)
 ).
 
 tff(gnss_template_no_location_requirements, axiom,
@@ -140,9 +140,9 @@ tff(imu_template_formalism, axiom,
   template_formalism_requirement(imu_template) = imu_msg
 ).
 
-tff(imu_template_role, axiom,
-  ~?[R : role]:
-    template_has_role_requirement(imu_template, R)
+tff(imu_template_representation_class, axiom,
+  ~?[R : representation_class]:
+    template_has_representation_class_requirement(imu_template, R)
 ).
 
 tff(imu_template_no_location_requirements, axiom,
@@ -181,9 +181,9 @@ tff(drone_state_template_formalism, axiom,
   template_formalism_requirement(ds_template) = drone_state_msg
 ).
 
-tff(ds_template_role, axiom,
-  ~?[R : role]:
-    template_has_role_requirement(ds_template, R)
+tff(ds_template_representation_class, axiom,
+  ~?[R : representation_class]:
+    template_has_representation_class_requirement(ds_template, R)
 ).
 
 tff(ds_template_no_location_requirements, axiom,
@@ -224,9 +224,9 @@ tff(wind_state_template_formalism, axiom,
   template_formalism_requirement(wind_template) = vector3_msg
 ).
 
-tff(wind_template_role, axiom,
-  ~?[R : role]:
-    template_has_role_requirement(wind_template, R)
+tff(wind_template_representation_class, axiom,
+  ~?[R : representation_class]:
+    template_has_representation_class_requirement(wind_template, R)
 ).
 
 tff(wind_template_no_location_requirements, axiom,
@@ -266,9 +266,9 @@ tff(trajectory_template_formalism, axiom,
   template_formalism_requirement(trajectory_template) = vector3_msg
 ).
 
-tff(trajectory_template_role, axiom,
-  ~?[R : role]:
-    template_has_role_requirement(trajectory_template, R)
+tff(trajectory_template_representation_class, axiom,
+  ~?[R : representation_class]:
+    template_has_representation_class_requirement(trajectory_template, R)
 ).
 
 tff(trajectory_template_no_location_requirements, axiom,
@@ -308,9 +308,9 @@ tff(drone_state_evolution_template_formalism, axiom,
   template_formalism_requirement(dse_template) = drone_state_evolution_msg
 ).
 
-tff(drone_state_evolution_template_role, axiom,
-  ~?[R : role]:
-    template_has_role_requirement(dse_template, R)
+tff(drone_state_evolution_template_representation_class, axiom,
+  ~?[R : representation_class]:
+    template_has_representation_class_requirement(dse_template, R)
 ).
 
 tff(drone_state_evolution_template_no_location_requirements, axiom,
@@ -507,9 +507,9 @@ tff(dse_engine_output_topic, axiom,
   )
 ).
 
-tff(dse_engine_output_role, axiom,
-  ~?[R : role]:
-    is_output_modelet_role(dse_engine, R)
+tff(dse_engine_output_representation_class, axiom,
+  ~?[R : representation_class]:
+    is_output_modelet_representation_class(dse_engine, R)
 ).
 
 tff(dse_template_set_decl, type,
@@ -550,9 +550,9 @@ tff(drone_state_evolution_engine_output_formalism, axiom,
   output_modelet_formalism(dsee_engine) = drone_state_evolution_msg
 ).
 
-tff(dsee_engine_output_role, axiom,
-  ~?[R : role]:
-    is_output_modelet_role(dsee_engine, R)
+tff(dsee_engine_output_representation_class, axiom,
+  ~?[R : representation_class]:
+    is_output_modelet_representation_class(dsee_engine, R)
 ).
 
 tff(drone_state_evolution_engine_output_topic, axiom,
@@ -601,9 +601,9 @@ tff(wind_estimation_engine_output_formalism, axiom,
   output_modelet_formalism(we_engine) = vector3_msg
 ).
 
-tff(we_engine_output_role, axiom,
-  ~?[R : role]:
-    is_output_modelet_role(we_engine, R)
+tff(we_engine_output_representation_class, axiom,
+  ~?[R : representation_class]:
+    is_output_modelet_representation_class(we_engine, R)
 ).
 
 tff(wind_estimation_engine_output_topic, axiom,

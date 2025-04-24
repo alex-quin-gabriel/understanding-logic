@@ -61,11 +61,11 @@ tff(formally_equivalent, axiom,
         modelet_models_concept(M, C)
       )
       &
-      ![R: role]:
+      ![R: representation_class]:
       ( % Equivalence of processing model classes
-        template_has_role_requirement(T, R)
+        template_has_representation_class_requirement(T, R)
         =>
-        modelet_has_role(M, R)
+        modelet_has_representation_class(M, R)
       )
       &
       ! [SPT : spacetime_point]:

@@ -36,11 +36,11 @@ def create_concepts(n):
     output += f"\ntff(distinct_concepts, axiom,\n  $distinct({",".join([f"concept_{index}" for index in range(1, n+1)])})\n).\n\n"
     return output
 
-def create_roles(n):
-    output = "%%%  roles  %%%\n"
+def create_representation_classes(n):
+    output = "%%%  representation_classes  %%%\n"
     for index in range(1, n+1):
-        output += f"tff(role_{index}_decl, type, role_{index} : role).\n"
-    output += f"\ntff(distinct_roles, axiom,\n  $distinct({",".join([f"role_{index}" for index in range(1, n+1)])})\n).\n\n"
+        output += f"tff(representation_class_{index}_decl, type, representation_class_{index} : representation_class).\n"
+    output += f"\ntff(distinct_representation_classes, axiom,\n  $distinct({",".join([f"representation_class_{index}" for index in range(1, n+1)])})\n).\n\n"
     return output
 
 
@@ -180,7 +180,7 @@ def create_templates_and_modelets(num_templates, num_modelets, max_properties, p
         modelet = ""
         concept = random.randint(1, NUM_CONCEPTS)
         formalism = random.randint(1, NUM_FORMALISMS)
-        role = random.randint(1, NUM_ROLES)
+        representation_class = random.randint(1, NUM_ROLES)
         location = random.randint(1, NUM_LOCATIONS_AND_EXTENTS)
         modelet += f"tff(modelet_{index}_decl, type, modelet_{index} : modelet).\n"
         template += f"tff(template_{index}_decl, type, template_{index} : template).\n"
@@ -190,13 +190,13 @@ def create_templates_and_modelets(num_templates, num_modelets, max_properties, p
             template += f"tff(template_{index}_has_requirement_{m}, axiom,\n  is_part_of(req_{m}, template_{index})\n).\n"
         modelet += f"tff(modelet_{index}_models_concept_{concept}, axiom,\n ![P: concept]:\n  (\n    is_concept_of_modelet(modelet_{index}, P) => P = concept_{concept}\n  )\n).\n"
         modelet += f"tff(formalism_of_modelet_{index}, axiom,\n  formalism_of_modelet(modelet_{index}) = formalism_{formalism}\n).\n\n"
-        modelet += f"tff(is_role_of_modelet_{index}, axiom,\n  ![R : role]:\n  (\n    is_role_of_modelet(modelet_{index}, R) => R = role_{role}\n  )\n).\n\n"
+        modelet += f"tff(is_representation_class_of_modelet_{index}, axiom,\n  ![R : representation_class]:\n  (\n    is_representation_class_of_modelet(modelet_{index}, R) => R = representation_class_{representation_class}\n  )\n).\n\n"
         modelet += f"tff(modelet_{index}_location, axiom,\n  modelet_location(modelet_{index}) = location_{location}\n).\n\n"
         modelet += f"tff(modelet_{index}_extent, axiom,\n  modelet_extent(modelet_{index}) = extent_{location}\n).\n\n"
         #for m in random.sample(range(1, property_count+1), random.randint(1, max_requirements)):
         template += f"tff(template_{index}_of_concept_{concept}, axiom,\n  ![P: concept]:\n  (\n    topic_of_template(template_{index}, P) => P = concept_{concept}\n  )\n).\n"
         template += f"tff(template_formalism_requirement_{index}, axiom,\n  template_formalism_requirement(template_{index}) = formalism_{formalism}\n).\n"
-        template += f"tff(template_has_role_requirement_{index}, axiom,\n  ![R : role]:\n  (\n    template_has_role_requirement(template_{index}, R) => R = role_{role}\n  )\n).\n"
+        template += f"tff(template_has_representation_class_requirement_{index}, axiom,\n  ![R : representation_class]:\n  (\n    template_has_representation_class_requirement(template_{index}, R) => R = representation_class_{representation_class}\n  )\n).\n"
         template += f"tff(template_{index}_location, axiom,\n  template_location(template_{index}) = location_{location}\n).\n\n"
         template += f"tff(template_{index}_extent, axiom,\n  template_extent(template_{index}) = extent_{location}\n).\n\n"
         template += f"tff(template_{index}_requirements, axiom,\n  ![R : requirement]:\n  (\n"
@@ -274,7 +274,7 @@ def main() -> int:
         #output += create_uints()
     #output += create_reals()
     output += create_concepts(NUM_PHENOMENA)
-    output += create_roles(NUM_ROLES)
+    output += create_representation_classes(NUM_ROLES)
     if not USE_ROS_DATATYPES:
         output += create_datatypes(NUM_DATATYPES)
     output += create_formalisms(NUM_FORMALISMS)

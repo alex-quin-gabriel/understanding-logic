@@ -21,8 +21,8 @@ tff(decl_datatype, type,
 ).
 
 % Role - Usage of a modelet by engines. Class in the Processing Model.
-tff(decl_role, type,
-  role : $tType
+tff(decl_representation_class, type,
+  representation_class : $tType
 ).
 
 

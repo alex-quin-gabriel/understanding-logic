@@ -20,8 +20,8 @@ tff(decl_engine_output_concept, type,
 
 
 % Engines can impart processing semantics unto their output modelets
-tff(decl_engine_imparts_role, type,
-  is_output_modelet_role : (engine * role) > $o
+tff(decl_engine_imparts_representation_class, type,
+  is_output_modelet_representation_class : (engine * representation_class) > $o
 ).
 
 
@@ -147,10 +147,10 @@ tff(decl_concept_of_modelet, type,
 
 
 
-% Modelets play roles when used by engines. They can be associated with an extrinsic (to the modelet) purpose.
+% Modelets play representation_classs when used by engines. They can be associated with an extrinsic (to the modelet) purpose.
 % TODO: this looks like it will turn out to be HOL
-tff(decl_role_of_modelet, type,
-  modelet_has_role : (modelet * role) > $o
+tff(decl_representation_class_of_modelet, type,
+  modelet_has_representation_class : (modelet * representation_class) > $o
 ).
 
 
@@ -226,19 +226,19 @@ tff(axiom_modelet_sets_are_parents_to_modelets, axiom,
 
 
 
-% Engines may impart roles unto Modelets
-tff(axiom_engine_may_impart_role, axiom,
-  ![E: engine, MS: modelet_set, M: modelet, R: role]:
+% Engines may impart representation_classs unto Modelets
+tff(axiom_engine_may_impart_representation_class, axiom,
+  ![E: engine, MS: modelet_set, M: modelet, R: representation_class]:
   (
     (
       exertable(E, MS)
       &
       exert(E, MS) = M
       &
-      is_output_modelet_role(E, R)
+      is_output_modelet_representation_class(E, R)
     )
     =>
-    modelet_has_role(M, R)
+    modelet_has_representation_class(M, R)
   )
 ).
 
@@ -328,8 +328,8 @@ tff(decl_template_has_concept_requirement, type,
 
 
 % Templates carry Role requirements. Extrinsic (from the perspective of the modelet) purpose.
-tff(decl_template_has_role_requirement, type,
-  template_has_role_requirement : (template * role) > $o
+tff(decl_template_has_representation_class_requirement, type,
+  template_has_representation_class_requirement : (template * representation_class) > $o
 ).
 
 
