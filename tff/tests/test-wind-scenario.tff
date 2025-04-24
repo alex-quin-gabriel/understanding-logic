@@ -656,33 +656,44 @@ tff(template_sets_are_distinct, axiom,
 %  )
 %).
 
+tff(question_decl, question,
+  ?[MS : modelet_set, M: modelet, US1: modelet_set]:
+  (
+    subset(MS, US1)
+    &
+    exertable(we_engine, MS)
+    &
+    exert(we_engine, MS) = M
+    &
+    is_in_modelet_set(M, exertion(we_engine, MS, M, US1))
+  )
+).
+
 %tff(question_decl, question,
-%  ?[MS : modelet_set, M: modelet, US1: modelet_set]:
+%  ?[M : modelet]:
 %  (
-%    is_in_modelet_set(M, exertion(we_engine, MS, M, US1))
+%    ~(M = wind0_modelet)
+%    &
+%    modelet_models_concept(M, wind) 
 %  )
 %).
-
-tff(question_decl, question,
-  ?[M : modelet]:
-  (
-    ~(M = wind0_modelet)
-    &
-    modelet_models_concept(M, wind) 
-  )
-
-).
 
 
 %tff(question_decl, question,
 %  ?[MS : modelet_set]:
 %  (
-%    exertable(MS, we_engine)
+%    exertable(we_engine, MS)
 %  )
 %).
 
 
 %tff(question_decl, question,
-%  ?[MS : modelet_set, E : engine, M: modelet, US1: modelet_set, US2: modelet_set]:
-%    exertion(dse_engine, MS, M, ius) = US2
+%  ?[WM : modelet]:
+%  (
+%    modelet_models_concept(WM, wind)
+%    &
+%    WM != wind0_modelet
+%    &
+%    WM != not_existing_modelet
+%  )
 %).

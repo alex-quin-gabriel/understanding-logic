@@ -7,14 +7,6 @@ tff(decl_engine, type,
 ).
 
 
-
-% There is an initialization engine, that is the creator of all initially existing Modelets.
-%tff(decl_init_engine, type,
-%  init_engine : engine
-%).
-
-
-
 tff(decl_engine_output_formalism, type,
   output_modelet_formalism : engine > formalism
 ).
@@ -44,8 +36,6 @@ tff(decl_modelet, type,
   modelet : $tType
 ).
 
-
-
 % Set of Modelets
 tff(decl_modelet_set, type,
   modelet_set : $tType
@@ -53,9 +43,52 @@ tff(decl_modelet_set, type,
 
 
 
+% Set Membership of Modelets
+tff(decl_set_m_membership, type,
+  is_in_modelet_set : (modelet * modelet_set) > $o
+).
+
+
+
+% (Finite) modelet sets
+tff(empty_modelet_set, type,
+  empty_ms : modelet_set
+).
+
+
+
+tff(modelet_set_empty, axiom,
+  ![M: modelet]:
+    ~is_in_modelet_set(M, empty_ms)
+).
+
+
+
+tff(subset_decl, type,
+  subset : (modelet_set * modelet_set) > $o
+).
+
+
+
+tff(subset_axiom, axiom,
+  ![MS1: modelet_set, MS2: modelet_set]:
+  (
+    subset(MS1, MS2)
+    <=>
+    ![M : modelet]:
+    (
+      is_in_modelet_set(M, MS1)
+      =>
+      is_in_modelet_set(M, MS2)
+    )
+  )
+).
+
+
+
 % Modelet Sets can be exerted by Engines
 tff(decl_exertable, type,
-  exertable: (modelet_set * engine) > $o
+  exertable: (engine * modelet_set) > $o
 ).
 
 
@@ -122,25 +155,6 @@ tff(decl_role_of_modelet, type,
 
 
 
-% Set Membership of Modelets
-tff(decl_set_m_membership, type,
-  is_in_modelet_set : (modelet * modelet_set) > $o
-).
-
-
-
-% (Finite) modelet sets
-tff(empty_modelet_set, type,
-  empty_ms : modelet_set
-).
-
-
-tff(modelet_set_empty, axiom,
-  ![M: modelet]:
-    ~is_in_modelet_set(M, empty_ms)
-).
-
-
 
 tff(modelet_set_add, type,
  s : (modelet * modelet_set) > modelet_set
@@ -164,14 +178,17 @@ tff(decl_exert, type,
 ).
 
 
-
 % Engines impart formalisms unto Modelets
 tff(axiom_engines_impart_formalism, axiom,
-  ![E: engine, MS: modelet_set]:
+  ![E: engine, MS: modelet_set, M: modelet]:
   (
-    exertable(MS, E)
+    (
+      exertable(E, MS)
+      &
+      exert(E, MS) = M
+    )
     =>
-    formalism_of_modelet(exert(E, MS)) = output_modelet_formalism(E)
+    formalism_of_modelet(M) = output_modelet_formalism(E)
   )
 ).
 
@@ -179,11 +196,15 @@ tff(axiom_engines_impart_formalism, axiom,
 
 % Engines are creators of Modelets
 tff(axiom_engines_are_creators_of_modelets, axiom,
-  ![E: engine, MS: modelet_set]:
+  ![E: engine, MS: modelet_set, M: modelet]:
   (
-    exertable(MS, E)
+    (
+      exertable(E, MS)
+      &
+      exert(E, MS) = M
+    )
     =>
-    modelet_has_creator(exert(E, MS), E)
+    modelet_has_creator(M, E)
   )
 ).
 
@@ -191,11 +212,15 @@ tff(axiom_engines_are_creators_of_modelets, axiom,
 
 % ModeletSets are parents of Modelets
 tff(axiom_modelet_sets_are_parents_to_modelets, axiom,
-  ![E: engine, MS: modelet_set]:
+  ![E: engine, MS: modelet_set, M: modelet]:
   (
-    exertable(MS, E)
+    (
+      exertable(E, MS)
+      &
+      exert(E, MS) = M
+    )
     =>
-    parents_of_modelet(exert(E, MS)) = MS
+    parents_of_modelet(M) = MS
   )
 ).
 
@@ -203,15 +228,17 @@ tff(axiom_modelet_sets_are_parents_to_modelets, axiom,
 
 % Engines may impart roles unto Modelets
 tff(axiom_engine_may_impart_role, axiom,
-  ![E: engine, MS: modelet_set, R: role]:
+  ![E: engine, MS: modelet_set, M: modelet, R: role]:
   (
     (
-      exertable(MS, E)
+      exertable(E, MS)
+      &
+      exert(E, MS) = M
       &
       is_output_modelet_role(E, R)
     )
     =>
-    modelet_has_role(exert(E, MS), R)
+    modelet_has_role(M, R)
   )
 ).
 
@@ -219,18 +246,38 @@ tff(axiom_engine_may_impart_role, axiom,
 
 % Engines may impart topic unto Modelets
 tff(axiom_engine_may_impart_topic, axiom,
-  ![E: engine, MS: modelet_set, C: concept]:
+  ![E: engine, MS: modelet_set, M: modelet, C: concept]:
   (
     (
-      exertable(MS, E)
+      exertable(E, MS)
+      &
+      exert(E, MS) = M
       &
       is_output_modelet_concept(E, C)
     )
     =>
-    modelet_models_concept(exert(E, MS), C) 
+    modelet_models_concept(M, C) 
   )
 ).
 
+%Engines produce reliable output
+%tff(axiom_engine_reliability, axiom,
+%  ![E: engine, MS: modelet_set]:
+%  (
+%    exertable(E, MS)
+%    =>
+%    ![M1: modelet, M2: modelet]:
+%    (
+%      (
+%        exert(E, MS) = M1
+%        &
+%        exert(E, MS) = M2
+%      )
+%      =>
+%      M1 = M2
+%    )
+%  )
+%).
 
 
 % Templates. Descriptions of Engine Inputs.
@@ -328,6 +375,6 @@ tff(axiom_modelet_set_is_exertable, axiom,
   (
    interfaces_match(MS, interface_of(E))
    =>
-   exertable(MS, E)
+   exertable(E, MS)
   )
 ).
