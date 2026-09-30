@@ -1,0 +1,76 @@
+/* Use the same colors as the CoreSense website */
+.md-header, .md-tabs {
+  /* Header background color */
+  background-color: #0C0026;
+}
+:root  > * {
+  /* Footer background colors */
+  --md-footer-bg-color:                #0C0026;
+  --md-footer-bg-color--dark:          #060014;
+
+  /* Accent color shades */
+  --md-accent-fg-color:                #eab82d;
+  --md-accent-fg-color--transparent:   #eab82d1a;
+}
+[data-md-color-scheme="default"] { /* Light mode */
+  /* Primary color shades */
+  --md-primary-fg-color:               #BF002A;
+}
+[data-md-color-scheme="slate"] { /* Dark mode */
+  /* Primary color shades */
+  --md-primary-fg-color:               #006A63;
+}
+
+
+/* Vertically center items in this block */
+div.center {
+    align-content: center; 
+    display: flex;
+}
+
+/* Center social icons in their container */
+.md-social {
+    margin: auto .4rem;
+}
+
+/* Set the sizes of logos in the footer */
+img.md-footer-logo {
+    height: 2.8rem;
+    max-width: max-content;
+}
+
+/* Force the next content to render below this block */
+div.container {
+    display: flow-root;
+}
+
+/* Use a small inline image */
+.md-typeset img.inline__small {
+    height: 6rem;
+    margin-bottom: 0;
+}
+
+
+.kinetic-color {
+    color: #eb2e28;
+}
+
+.foxy-color {
+    color: #fd553c;
+}
+
+.noetic-color {
+    color: #88b55a;
+}
+
+.humble-color {
+    color: #0091d5;
+}
+
+.ubuntu-orange {
+    color: #e95420;
+}
+
+.ubuntu-aubergine {
+    color: #77216f;
+}
